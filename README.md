@@ -35,7 +35,7 @@ Include it in your `composer.json` as follows:
     Or  from the command line.
 
     ```
-    php composer.phar require abenity/abenity-php:1.*
+    php composer.phar require abenity/abenity-php:0.*
     ```
 
 2. Run `composer update`.

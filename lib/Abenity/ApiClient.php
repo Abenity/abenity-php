@@ -34,7 +34,7 @@ class ApiClient
 
     private $api_key;
 
-    private $api_url = 'https://api.abenity.com/';
+    private $api_url = 'https://api.abenity.com';
 
     /**
      * ApiClient constructor
@@ -63,24 +63,25 @@ class ApiClient
     {
 
         // Set the request type and construct the POST request
-        $postdata = array_merge( (array) $data,
+        $data = array_merge( (array) $data,
             array(
                 'api_username' => $this->api_username,
                 'api_password' => $this->api_password,
                 'api_key' => $this->api_key,
             )
         );
+        $postdata = http_build_query($data);
 
         // Debugging output
         $this->debug = array();
-        $this->debug['HTTP Method'] = $http_method.$api_method;
-        $this->debug['Request URL'] = $this->api_url;
+        $this->debug['HTTP Method'] = $http_method;
+        $this->debug['Request URL'] = $this->api_url.$api_method;
 
         // Create a cURL handle
         $ch = curl_init();
 
         // Set the request
-        curl_setopt($ch, CURLOPT_URL, $this->api_url);
+        curl_setopt($ch, CURLOPT_URL, $this->api_url.$api_method);
 
         // Do not ouput the HTTP header
         curl_setopt($ch, CURLOPT_HEADER, false);

@@ -44,6 +44,6 @@ if( $abenity_response->status == 'ok' ){
 
     // Handle error
     // ...
-    echo "Fail\n":
+    echo "Fail: " . $abenity_response->error . "\n";
 
 }
