@@ -128,9 +128,14 @@ class ApiClient
      **/
     private function parseResponse($response, $format = 'xml')
     {
+
+        $result = null;
+
         if($format == 'xml'){
-            return simplexml_load_string($response);
+            $result = simplexml_load_string($response);
         }
+
+        return $result;
     }
 
     /**

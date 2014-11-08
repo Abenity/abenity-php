@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true" forceCoversAnnotation="false">
+
+    <php>
+        <const name="ABENITY_API_USERNAME" value="" />
+        <const name="ABENITY_API_PASSWORD" value="" />
+        <const name="ABENITY_API_KEY" value="" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Abenity API Test Suite">
+            <directory>tests/Abenity</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">lib/Abenity</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="report" charset="UTF-8" />
+    </logging>
+
+</phpunit>
