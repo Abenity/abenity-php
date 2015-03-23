@@ -15,11 +15,9 @@ This library requires PHP 5.3+
 [`abenity/abenity-php`](http://packagist.org/packages/abenity/abenity-php) package is available on [Packagist](http://packagist.org).
 
 Install Composer if necessary
-
-    ```
-    curl -sS https://getcomposer.org/installer | php
-    ```
-
+```
+curl -sS https://getcomposer.org/installer | php
+```
 Include it in your `composer.json` as follows:
 
 1. Add abenity/abenity-php as a dependency in composer.json.
@@ -41,7 +39,6 @@ Include it in your `composer.json` as follows:
 2. Run `composer update`.
 3. Now `Abenity` will be autoloaded into your project.
 
-
     ```
     require 'vendor/autoload.php';
 
@@ -55,7 +52,6 @@ Include it in your `composer.json` as follows:
 
     ```
     require 'abenity-php/lib/Abenity.php';
-
 
     $abenity = new Abenity\ApiClient('my_api_key','my_api_username','my_api_password');
     ```
