@@ -65,5 +65,5 @@ Include it in your `composer.json` as follows:
 Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 
 ```
-phpunit --bootstrap vendor/autoload.php test/AbenityTest
+[abenity-php]# phpunit tests
 ```
