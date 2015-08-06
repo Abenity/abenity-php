@@ -29,6 +29,9 @@ if( $abenity_response->status == 'ok' ){
     // Compose an HTML link
     $HTML_link = '<a href="'.$abenity_response->login_URL.'?encrypted_username='.$abenity_response->encrypted_username.'&encrypted_password='.$abenity_response->encrypted_password.'">Visit your Savings Program</a>';
 
+    // Display link
+    print($HTML_link);
+
     // Redirect browser
     // header('Location: '.$abenity_response->login_URL.'?encrypted_username='.$abenity_response->encrypted_username.'&encrypted_password='.$abenity_response->encrypted_password);
     // exit;
