@@ -1,5 +1,15 @@
 <?php
 
+/*
+    Implementation Notes:
+
+    1) Change the API credentials
+    2) Insert your Private Key
+    3) Define your $member
+    4) Run script from Composer directory for autoloading to work
+        [composer]# php vendor/abenity/abenity-php/examples/ssoMember.php
+*/
+
 // Include autoloader (from Composer)
 require 'vendor/autoload.php';
 
@@ -32,21 +42,21 @@ $member = array(
     'country' => 'US'
 );
 
-// Attempt to register member
-$abenity_response = $Abenity->ssoMember($privatekey, $member);
+// Attempt to SSO a member
+$abenity_response = $abenity->ssoMember($member, $privatekey);
 
-// Test verifiction
-if( $abenity_response->status == 'ok' ){
+if( isset($abenity_response->status) ){
 
-    // Save Member's Abenity username/password for future use
-    // ...
-    echo "Pass\n";
+    // Test verifiction
+    if( $abenity_response->status == 'ok' ){
 
-}else{
+        // Display the login link
+        print($abenity_response->data->token_url) . "\n";
 
-    // Handle error
-    // ...
-    echo "Fail: " . $abenity_response->error . "\n";
+    }else{
+
+        // Handle $abenity_response->error ...
+
+    }
 
 }
-

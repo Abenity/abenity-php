@@ -1,5 +1,14 @@
 <?php
 
+/*
+    Implementation Notes:
+
+    1) Change the API credentials
+    2) Set the 'username' and 'password'
+    4) Run script from Composer directory for autoloading to work
+        [composer]# php vendor/abenity/abenity-php/examples/ssoMember.php
+*/
+
 // Include autoloader (from Composer)
 require 'vendor/autoload.php';
 
