@@ -17,16 +17,21 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         unset($this->client);
     }
 
-    public function testRegisterMember(){
-        $response = $this->client->registerMember(
-            array()
-        );
+    public function testSsoMember()
+    {
+        $response = $this->client->ssoMember(array(), '');
         $this->assertEquals('fail', $response->status);
     }
 
-    public function testAuthenticateMember(){
-        $response = $this->client->authenticateMember('username','password');
+    public function testRegisterMember()
+    {
+        $response = $this->client->registerMember(array());
         $this->assertEquals('fail', $response->status);
     }
 
+    public function testAuthenticateMember()
+    {
+        $response = $this->client->authenticateMember('username', 'password');
+        $this->assertEquals('fail', $response->status);
+    }
 }
