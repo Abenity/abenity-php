@@ -6,7 +6,7 @@ You can find the full API documentation in the [official documentation](http://a
 
 ## Requirements
 
-This library requires PHP 5.3+
+This library requires PHP 5.3+ with the [mcrypt module](http://php.net/manual/en/book.mcrypt.php)
 
 ## Installation
 
