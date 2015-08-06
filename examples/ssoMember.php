@@ -11,28 +11,29 @@ define('ABENITY_API_KEY', 'dlk1o89wc7emcyd7yqphja60i7x5jkx');
 // Create new Abenity object
 $abenity = new \Abenity\ApiClient(ABENITY_API_USERNAME, ABENITY_API_PASSWORD, ABENITY_API_KEY);
 
+// Define your private key, probably read in from a file.
+$privatekey = '-----BEGIN RSA PRIVATE KEY-----
+...
+-----END RSA PRIVATE KEY-----';
+
 // Set member profile
 $member = array(
+    'creation_time' => date('c'),
+    'salt' => rand(0,100000),
+    'send_welcome_email' => 1,
+    'client_user_id' => '1',
+    'email' => 'markr2@abenity.com',
     'firstname' => 'John',
     'lastname' => 'Smith',
     'address' => '2134 Main Street',
     'city' => 'Irvine',
     'state' => 'CA',
     'zip' => '92620',
-    'country' => 'US',
-    'phone' => '(949) 234-0987',
-    'position' => 'secretary',
-    'email' => 'john@acme.com',
-    'username' => 'jsmith',
-    'password' => 'abc123',
-    'spotlight' => 1,
-    'offer_radius' => 20,
-    'send_welcome_email' => 1
+    'country' => 'US'
 );
 
-
 // Attempt to register member
-$abenity_response = $abenity->registerMember($member);
+$abenity_response = $Abenity->ssoMember($privatekey, $member);
 
 // Test verifiction
 if( $abenity_response->status == 'ok' ){
@@ -48,3 +49,4 @@ if( $abenity_response->status == 'ok' ){
     echo "Fail: " . $abenity_response->error . "\n";
 
 }
+
