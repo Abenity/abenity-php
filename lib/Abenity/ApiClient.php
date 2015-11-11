@@ -62,14 +62,12 @@ class ApiClient
             $this->timeout = $timeout;
         }
 
-        // Create new Crypt_RSA object
-        $this->rsa = new \Crypt_RSA;
-
         // Define a code alphabet for generating strings
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         // Create Triple DES Key
-        for ($i = 0; $i < 24; $i++) {
+        $triple_des_size = mcrypt_get_key_size('tripledes', 'cbc');
+        for ($i = 0; $i < $triple_des_size; $i++) {
             $this->triple_des_key .= $codeAlphabet[$this->cryptoRandSecure(0, strlen($codeAlphabet))];
         }
 
@@ -87,15 +85,25 @@ class ApiClient
     {
 
         // Set the request type and construct the POST request
-        $data = array_merge(
-            (array) $data,
-            array(
-                'api_username' => $this->api_username,
-                'api_password' => $this->api_password,
-                'api_key' => $this->api_key,
-            )
-        );
-        $postdata = http_build_query($data);
+        if(is_array($data)){
+            $data = array_merge(
+                (array) $data,
+                array(
+                    'api_username' => $this->api_username,
+                    'api_password' => $this->api_password,
+                    'api_key' => $this->api_key,
+                )
+            );
+            $postdata = http_build_query($data);
+        }else{
+            $postdata = sprintf(
+                "api_username=%s&api_password=%s&api_key=%s&%s",
+                urlencode($this->api_username),
+                urlencode($this->api_password),
+                urlencode($this->api_key),
+                $data
+            );
+        }
 
         // Debugging output
         $this->debug = array();
@@ -219,13 +227,13 @@ class ApiClient
     private function encryptPayload($payload_string, $iv)
     {
 
-        $response = '';
+        $payload_urlencoded = '';
 
-        $nameValuePairBinary = mcrypt_encrypt(MCRYPT_3DES, $this->triple_des_key, $payload_string, MCRYPT_MODE_CBC, $iv);
-        $nameValuePairText = base64_encode($nameValuePairBinary);
-        $response =  urlencode($nameValuePairText) . "decode";
+        $payload_binary = mcrypt_encrypt(MCRYPT_3DES, $this->triple_des_key, $payload_string, MCRYPT_MODE_CBC, $iv);
+        $payload_base64 = base64_encode($payload_binary);
+        $payload_urlencoded =  urlencode($payload_base64) . "decode";
 
-        return $response;
+        return $payload_urlencoded;
     }
 
     /**
@@ -237,36 +245,42 @@ class ApiClient
     private function encryptCipher($triple_des_key)
     {
 
-        $response = '';
+        $triple_des_key_urlencoded = '';
 
-        $this->rsa->loadKey($this->public_key);
-        $encryptedSymmetricKeyBinary = $this->rsa->encrypt($triple_des_key);
-        $encryptedSymmetricKeyText = base64_encode($encryptedSymmetricKeyBinary);
-        $response = urlencode($encryptedSymmetricKeyText) . "decode";
+        $rsa = new \Crypt_RSA;
+        $rsa->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
+        $rsa->loadKey($this->public_key);
+        $triple_des_key_binary = $rsa->encrypt($triple_des_key);
+        $triple_des_key_base64 = base64_encode($triple_des_key_binary);
+        $triple_des_key_urlencoded = urlencode($triple_des_key_base64) . "decode";
 
-        return $response;
+        return $triple_des_key_urlencoded;
     }
 
     /**
      * Sign a message using a private RSA key
      *
-     * @param string $payload_string The message to be signed
+     * @param string $payload The message to be signed
      * @param string $private_key An RSA private key
      * @return string A base64-encoded and url-encoded hash of the $payload_string
      */
-    private function signMessage($payload_string, $private_key)
+    private function signMessage($payload, $private_key)
     {
 
-        $response = '';
+        $signature_urlencoded = '';
 
-        $nameValuePairText = urldecode(substr($payload_string, 0, -6));
-        $messageDigest = md5($nameValuePairText);
-        $this->rsa->loadKey($private_key);
-        $signedMessageBinary = $this->rsa->encrypt($messageDigest);
-        $signedMessageText = base64_encode($signedMessageBinary);
-        $response = urlencode($signedMessageText) . "decode";
+        $rsa_signature = new \Crypt_RSA;
+        $rsa_signature->loadKey($private_key);
+        $rsa_signature->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
+        $rsa_signature->setHash('md5');
 
-        return $response;
+        $payload_base64 = urldecode( substr($payload, 0, -6) );
+
+        $signature_binary = $rsa_signature->sign($payload_base64);
+        $signature_base64 = base64_encode($signature_binary);
+        $signature_urlencoded = urlencode($signature_base64) . "decode";
+
+        return $signature_urlencoded;
     }
 
     /**
@@ -281,21 +295,24 @@ class ApiClient
     {
 
         // Convert member profile array to a HTTP query string
+
         $payload_string = http_build_query($member_profile);
 
         // Create Initialization Vector for symmetric encryption
         $iv_size = mcrypt_get_iv_size(MCRYPT_3DES, MCRYPT_MODE_CBC);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+        $iv_urlencoded = urlencode(base64_encode($iv)) . "decode";
 
         $Payload = $this->encryptPayload($payload_string, $iv);
         $Cipher = $this->encryptCipher($this->triple_des_key);
         $Signature = $this->signMessage($Payload, $private_key);
 
-        $data = array(
-            'Payload' => $Payload,
-            'Cipher' => $Cipher,
-            'Signature' => $Signature,
-            'Iv' => urlencode(base64_encode($iv)) . "decode"
+        $data = sprintf(
+            "Payload=%s&Cipher=%s&Signature=%s&Iv=%s",
+            $Payload,
+            $Cipher,
+            $Signature,
+            $iv_urlencoded
         );
 
         return $this->sendRequest('/sso_member.json', 'POST', $data);
