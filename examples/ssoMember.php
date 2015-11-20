@@ -11,7 +11,7 @@
 */
 
 // Include autoloader (from Composer)
-require 'vendor/autoload.php';
+require __DIR__ . '/../../../../vendor/autoload.php';
 
 // Define Abenity API Credentials. Replace these with your values.
 define('ABENITY_API_USERNAME', 'Acme');
@@ -56,6 +56,7 @@ if( isset($abenity_response->status) ){
     }else{
 
         // Handle $abenity_response->error ...
+        var_dump($abenity_response->error);
 
     }
 
