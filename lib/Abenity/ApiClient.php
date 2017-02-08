@@ -11,7 +11,7 @@ namespace Abenity;
 class ApiClient
 {
 
-    private $version;
+    private $version = 2;
 
     public $debug;
 
@@ -31,14 +31,17 @@ class ApiClient
 
     /**
      * ApiClient constructor
+     *
      * @param String $api_username Your API Username
      * @param String $api_password Your API Password
      * @param String $api_key Your API Key
      * @param Integer $version The API version
+     * @param String $environment Default is "live". Set to "Sandbox" to send requests to "sandbox.abenity.com"
      * @param Integer $timeout Set how long to wait for the API to respond
+     *
      * @return null
      */
-    public function __construct($api_username, $api_password, $api_key, $version = 1, $timeout = 10)
+    public function __construct($api_username, $api_password, $api_key, $version = 2, $environment = 'live', $timeout = 10)
     {
 
         // Set API Credentials
@@ -51,9 +54,13 @@ class ApiClient
             'y+Hb5e0rwPDBA6zfyrYRj8uK/1HleFEr4v8u/HbnJmiFoNJ2hfZXn6Qw== phpseclib-generated-key';
 
         // Set API Version
-        $this->version = 1;
-        if (is_numeric($version) && $version > 0 && $version < 2) {
+        if (is_numeric($version)) {
             $this->version = $version;
+        }
+
+        // Set Environment
+        if ($environment == 'sandbox') {
+            $this->api_url = 'https://sandbox.abenity.com';
         }
 
         // Set API Timeout
@@ -79,6 +86,7 @@ class ApiClient
      * @param string $api_method The API method to be called
      * @param string $http_method The HTTP method to be used (GET, POST, PUT, DELETE, etc.)
      * @param array $data Any data to be sent to the API
+     *
      * @return string A data-object of the response
      */
     private function sendRequest($api_method, $http_method = 'GET', $data = null)
@@ -161,8 +169,11 @@ class ApiClient
 
     /**
      * Parse the API response
+     *
      * @param string $response The raw API response
      * @param string $format The format to parse. ['json'|'xml']
+     *
+     * @return string The parsed response
      */
     private function parseResponse($response, $format = 'json')
     {
@@ -186,6 +197,7 @@ class ApiClient
      *
      * @param integer $min The random number lower bound
      * @param integer $max The random number upper bound
+     *
      * @return integer A random integer between the input bounds
      */
     private function cryptoRandSecure($min, $max)
@@ -222,6 +234,7 @@ class ApiClient
      *
      * @param string $payload_string An input string
      * @param string $iv An initialization vector for Triple-DES in CBC mode
+     *
      * @return string A base64-encoded and url-encoded representation of the $payload_string
      */
     private function encryptPayload($payload_string, $iv)
@@ -240,6 +253,7 @@ class ApiClient
      * Asymmetrically encrypt a symmetrical encryption key
      *
      * @param string $triple_des_key A Triple DES (3DES) encryption key
+     *
      * @return string A base64-encoded and url-encoded representation of the $triple_des_key
      */
     private function encryptCipher($triple_des_key)
@@ -262,6 +276,7 @@ class ApiClient
      *
      * @param string $payload The message to be signed
      * @param string $private_key An RSA private key
+     *
      * @return string A base64-encoded and url-encoded hash of the $payload_string
      */
     private function signMessage($payload, $private_key)
@@ -286,9 +301,9 @@ class ApiClient
     /**
      * Single Sign-On a member
      *
-     * @return string The raw API response
      * @param array $member_profile An array of key/value pairs that describes the member
      * @param array $private_key Your RSA private key, used to sign your message
+     *
      * @return string The raw API response
      */
     public function ssoMember($member_profile, $private_key)
@@ -319,30 +334,36 @@ class ApiClient
     }
 
     /**
-     * Register a Member
+     * Deactivate a Member
      *
-     * @param array $member_profile An array of key/value pairs that describes the member
+     * @param string $client_user_id The unique Client User ID for the member
+     * @param boolean $send_notification Set to true to send a notification email
+     *
      * @return string The raw API response
      */
-    public function registerMember($member_profile)
+    public function deactivateMember($client_user_id, $send_notification = false)
     {
-        return $this->sendRequest('/register_member.json', 'POST', $member_profile);
+        $data = array(
+            'client_user_id' => $client_user_id,
+            'send_notification' => $send_notification
+        );
+        return $this->sendRequest('/deactivate_member.json', 'POST', $data);
     }
 
     /**
-     * Authenticate a Username/Password as an active member. If valid,
-     * the response will contain a link to log the member into the Abenity program
+     * Reactivate a Member
      *
-     * @param string $username The user's unique Abenity Username
-     * @param string $password The user's Abenity password
+     * @param string $client_user_id The unique Client User ID for the member
+     * @param boolean $send_notification Set to true to send a notification email
+     *
      * @return string The raw API response
      */
-    public function authenticateMember($username, $password)
+    public function reactivateMember($client_user_id, $send_notification = false)
     {
         $data = array(
-            'username' => $username,
-            'password' => $password
+            'client_user_id' => $client_user_id,
+            'send_notification' => $send_notification
         );
-        return $this->sendRequest('/encrypt_login.json', 'POST', $data);
+        return $this->sendRequest('/reactivate_member.json', 'POST', $data);
     }
 }

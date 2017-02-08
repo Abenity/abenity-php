@@ -21,20 +21,13 @@ define('ABENITY_API_KEY', 'dlk1o89wc7emcyd7yqphja60i7x5jkx');
 $abenity = new \Abenity\ApiClient(ABENITY_API_USERNAME, ABENITY_API_PASSWORD, ABENITY_API_KEY);
 
 // Attempt to register member
-$abenity_response = $abenity->authenticateMember('username', 'password');
+$abenity_response = $abenity->deactivateMember('client_user_id', 0);
 
 // Test verifiction
 if( $abenity_response->status == 'ok' ){
 
     // Compose an HTML link
-    $HTML_link = '<a href="'.$abenity_response->login_URL.'?encrypted_username='.$abenity_response->encrypted_username.'&encrypted_password='.$abenity_response->encrypted_password.'">Visit your Savings Program</a>';
-
-    // Display link
-    print($HTML_link);
-
-    // Redirect browser
-    // header('Location: '.$abenity_response->login_URL.'?encrypted_username='.$abenity_response->encrypted_username.'&encrypted_password='.$abenity_response->encrypted_password);
-    // exit;
+    echo 'Success' . PHP_EOL;
 
 }else{
 

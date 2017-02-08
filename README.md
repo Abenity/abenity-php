@@ -14,29 +14,14 @@ This library requires PHP 5.3+ with the [mcrypt module](http://php.net/manual/en
 
 [`abenity/abenity-php`](http://packagist.org/packages/abenity/abenity-php) package is available on [Packagist](http://packagist.org).
 
-Install Composer if necessary
-```
-curl -sS https://getcomposer.org/installer | php
-```
 Include it in your `composer.json` as follows:
 
 1. Add abenity/abenity-php as a dependency in composer.json.
 
     ```
-    "require": {
-        ...
-        "abenity/abenity-php" : "0.*"
-        ...
-    }
+    composer require abenity/abenity-php:^2
     ```
 
-    Or  from the command line.
-
-    ```
-    php composer.phar require abenity/abenity-php:0.*
-    ```
-
-2. Run `composer update`.
 3. Now `Abenity` will be autoloaded into your project.
 
     ```
@@ -46,9 +31,12 @@ Include it in your `composer.json` as follows:
     ```
 
 ### Manually
+
 1. Download the latest release.
+
 2. Extract into a folder in your project root named "abenity-php".
-2. Include `Abenity` in your project like this:
+
+3. Include `Abenity` in your project like this:
 
     ```
     require 'abenity-php/lib/Abenity.php';
@@ -60,8 +48,8 @@ Include it in your `composer.json` as follows:
 
 ### See examples folder
 
-
 ## Contributing
+
 Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 
 ```

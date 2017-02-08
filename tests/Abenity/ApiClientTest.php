@@ -1,5 +1,28 @@
 <?php
 
+/**
+ * Abenity API Test
+ *
+ * @category  Abenity
+ * @package   Abenity_Api_Test
+ * @author    Abenity <support@abenity.com>
+ * @copyright 2017 Abenity Inc.
+ * @license   MIT
+ * @link      https://github.com/Abenity/abenity-php
+ **/
+
+namespace Abenity\ApiClient\Tests;
+
+/**
+ * Abenity API Class
+ *
+ * @category  Abenity
+ * @package   Abenity_Api_Test
+ * @author    Abenity <support@abenity.com>
+ * @copyright 2017 Abenity Inc.
+ * @license   MIT
+ * @link      https://github.com/Abenity/abenity-php
+ **/
 class ApiClientTest extends \PHPUnit_Framework_TestCase
 {
     private $client;
@@ -23,15 +46,15 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('fail', $response->status);
     }
 
-    public function testRegisterMember()
+    public function testDeactivateMember()
     {
-        $response = $this->client->registerMember(array());
+        $response = $this->client->deactivateMember(array());
         $this->assertEquals('fail', $response->status);
     }
 
-    public function testAuthenticateMember()
+    public function testReactivateMember()
     {
-        $response = $this->client->authenticateMember('username', 'password');
+        $response = $this->client->reactivateMember(array());
         $this->assertEquals('fail', $response->status);
     }
 }

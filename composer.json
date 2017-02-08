@@ -1,7 +1,7 @@
 {
     "name": "abenity/abenity-php",
     "type": "library",
-    "description": "PHP client for Abenity",
+    "description": "PHP client for the Abenity API documented at https://abenity.com/developers/api",
     "keywords": ["abenity", "api", "rest", "web service", "wrapper", "php", "perks", "discounts"],
     "homepage": "https://github.com/abenity/abenity-php",
     "license": "MIT",
@@ -21,11 +21,11 @@
         "phpseclib/phpseclib": "0.3.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "^6"
     },
     "autoload": {
-       "psr-0": {
-            "Abenity": "lib"
+       "psr-4": {
+            "Abenity\\": "lib/Abenity"
         }
     }
 }
