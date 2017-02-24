@@ -139,6 +139,9 @@ class ApiClient
         // Set the maximum number of seconds to allow cURL functions to execute
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
 
+        // Set the user agent
+        curl_setopt($ch, CURLOPT_USERAGENT, 'abenity/abenity-php v2)');
+
         // Send data
         if (!empty($postdata)) {
 
