@@ -65,7 +65,7 @@ class ApiClient
 
         // Set API Timeout
         $this->timeout = 10;
-        if (is_numeric($version)) {
+        if (is_numeric($timeout)) {
             $this->timeout = $timeout;
         }
 
