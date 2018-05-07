@@ -140,7 +140,7 @@ class ApiClient
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
 
         // Set the user agent
-        curl_setopt($ch, CURLOPT_USERAGENT, 'abenity/abenity-php v2)');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'abenity/abenity-php v2');
 
         // Send data
         if (!empty($postdata)) {
