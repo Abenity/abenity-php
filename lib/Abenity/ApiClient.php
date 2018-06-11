@@ -264,7 +264,7 @@ class ApiClient
 
         $triple_des_key_urlencoded = '';
 
-        $rsa = new \Crypt_RSA;
+        $rsa = new \phpseclib\Crypt\RSA;
         $rsa->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
         $rsa->loadKey($this->public_key);
         $triple_des_key_binary = $rsa->encrypt($triple_des_key);
@@ -287,7 +287,7 @@ class ApiClient
 
         $signature_urlencoded = '';
 
-        $rsa_signature = new \Crypt_RSA;
+        $rsa_signature = new \phpseclib\Crypt\RSA;
         $rsa_signature->loadKey($private_key);
         $rsa_signature->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
         $rsa_signature->setHash('md5');
