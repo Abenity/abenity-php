@@ -29,6 +29,8 @@ class ApiClient
 
     private $triple_des_key;
 
+    private $symmetric_encryption_cipher = 'des-ede3-cbc';
+
     /**
      * ApiClient constructor
      *
@@ -73,7 +75,7 @@ class ApiClient
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         // Create Triple DES Key
-        $triple_des_size = mcrypt_get_key_size('tripledes', 'cbc');
+        $triple_des_size = 24;
         for ($i = 0; $i < $triple_des_size; $i++) {
             $this->triple_des_key .= $codeAlphabet[$this->cryptoRandSecure(0, strlen($codeAlphabet))];
         }
@@ -245,7 +247,14 @@ class ApiClient
 
         $payload_urlencoded = '';
 
-        $payload_binary = mcrypt_encrypt(MCRYPT_3DES, $this->triple_des_key, $payload_string, MCRYPT_MODE_CBC, $iv);
+        $payload_binary = openssl_encrypt(
+            $payload_string,
+            $this->symmetric_encryption_cipher,
+            $this->triple_des_key,
+            OPENSSL_RAW_DATA,
+            $iv
+        );
+
         $payload_base64 = base64_encode($payload_binary);
         $payload_urlencoded =  urlencode($payload_base64) . "decode";
 
@@ -317,8 +326,9 @@ class ApiClient
         $payload_string = http_build_query($member_profile);
 
         // Create Initialization Vector for symmetric encryption
-        $iv_size = mcrypt_get_iv_size(MCRYPT_3DES, MCRYPT_MODE_CBC);
-        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+        $iv = openssl_random_pseudo_bytes(
+            openssl_cipher_iv_length($this->symmetric_encryption_cipher)
+        );
         $iv_urlencoded = urlencode(base64_encode($iv)) . "decode";
 
         $Payload = $this->encryptPayload($payload_string, $iv);
