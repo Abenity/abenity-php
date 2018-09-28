@@ -142,7 +142,7 @@ class ApiClient
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
 
         // Set the user agent
-        curl_setopt($ch, CURLOPT_USERAGENT, 'abenity/abenity-php v2');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'abenity/abenity-php v2.1');
 
         // Send data
         if (!empty($postdata)) {
@@ -273,8 +273,8 @@ class ApiClient
 
         $triple_des_key_urlencoded = '';
 
-        $rsa = new \Crypt_RSA;
-        $rsa->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
+        $rsa = new \phpseclib\Crypt\RSA;
+        $rsa->setEncryptionMode($rsa::ENCRYPTION_PKCS1);
         $rsa->loadKey($this->public_key);
         $triple_des_key_binary = $rsa->encrypt($triple_des_key);
         $triple_des_key_base64 = base64_encode($triple_des_key_binary);
@@ -296,9 +296,9 @@ class ApiClient
 
         $signature_urlencoded = '';
 
-        $rsa_signature = new \Crypt_RSA;
+        $rsa_signature = new \phpseclib\Crypt\RSA;
         $rsa_signature->loadKey($private_key);
-        $rsa_signature->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
+        $rsa_signature->setSignatureMode($rsa_signature::ENCRYPTION_PKCS1);
         $rsa_signature->setHash('md5');
 
         $payload_base64 = urldecode( substr($payload, 0, -6) );
