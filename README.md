@@ -1,12 +1,12 @@
 # PHP Client for Abenity API
 
-A PHP library for using the Abenity API.  
+A PHP library for using the Abenity API.
 
-You can find the full API documentation in the [official documentation](http://api.abenity.com/documentation).
+You can find the full API documentation in the [official documentation](https://abenity.com/developers/api/members).
 
 ## Requirements
 
-This library requires PHP 5.3+ with the [mcrypt module](http://php.net/manual/en/book.mcrypt.php)
+This library works with PHP 5.6 and PHP 7 and requires the [OpenSSL module](https://www.php.net/manual/en/book.openssl.php)
 
 ## Installation
 
