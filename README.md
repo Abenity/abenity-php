@@ -6,7 +6,7 @@ You can find the full API documentation in the [official documentation](https://
 
 ## Requirements
 
-This library works with PHP 5.6 and PHP 7 and requires the [OpenSSL module](https://www.php.net/manual/en/book.openssl.php)
+This library works with PHP versions 7 and 8 and requires the [OpenSSL module](https://www.php.net/manual/en/book.openssl.php)
 
 ## Installation
 
