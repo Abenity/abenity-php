@@ -23,19 +23,19 @@ namespace Abenity\ApiClient\Tests;
  * @license   MIT
  * @link      https://github.com/Abenity/abenity-php
  **/
-class ApiClientTest extends \PHPUnit_Framework_TestCase
+class ApiClientTest extends \PHPUnit\Framework\TestCase
 {
     private $client;
     private $invalid_token;
     private $valid_token;
 
-    public function setUp()
+    public function setUp() : void
     {
         // Constants defined in phpunit.xml.dist
         $this->client = new \Abenity\ApiClient(ABENITY_API_USERNAME, ABENITY_API_PASSWORD, ABENITY_API_KEY);
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         unset($this->client);
     }
